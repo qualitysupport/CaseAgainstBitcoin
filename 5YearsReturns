@@ -1,0 +1,111 @@
+# Load required package; install if not already installed
+if (!require(quantmod)) {
+  install.packages("quantmod")
+  library(quantmod)
+}
+
+# Define investment parameters
+initial_investment <- 10000
+# Set start date to approximately 5 years ago and end date to today
+start_date <- Sys.Date() - 5 * 365
+end_date <- Sys.Date()
+
+# Download historical data for SPY, BTC-USD, AMZN, and AAPL from Yahoo Finance
+tickers <- c("SPY", "BTC-USD", "AMZN", "AAPL")
+getSymbols(tickers, src = "yahoo", from = start_date, to = end_date)
+
+### SPY Investment Analysis ###
+# Extract the adjusted closing prices for SPY
+spy_adj <- SPY[, "SPY.Adjusted"]
+# Get initial and final prices
+spy_initial_price <- as.numeric(spy_adj[1])
+spy_final_price <- as.numeric(tail(spy_adj, 1))
+# Calculate number of shares purchased with the initial investment
+spy_shares <- initial_investment / spy_initial_price
+# Calculate the final value, profit, and percentage return
+spy_final_value <- spy_shares * spy_final_price
+spy_profit <- spy_final_value - initial_investment
+spy_percent_return <- (spy_profit / initial_investment) * 100
+
+### Bitcoin (BTC-USD) Investment Analysis ###
+# Extract the adjusted closing prices for Bitcoin
+btc_adj <- `BTC-USD`[, "BTC-USD.Adjusted"]
+# Get initial and final prices
+btc_initial_price <- as.numeric(btc_adj[1])
+btc_final_price <- as.numeric(tail(btc_adj, 1))
+# Calculate number of Bitcoin units purchased
+btc_units <- initial_investment / btc_initial_price
+# Calculate the final value, profit, and percentage return
+btc_final_value <- btc_units * btc_final_price
+btc_profit <- btc_final_value - initial_investment
+btc_percent_return <- (btc_profit / initial_investment) * 100
+
+### Amazon (AMZN) Investment Analysis ###
+# Extract the adjusted closing prices for Amazon
+amzn_adj <- AMZN[, "AMZN.Adjusted"]
+# Get initial and final prices
+amzn_initial_price <- as.numeric(amzn_adj[1])
+amzn_final_price <- as.numeric(tail(amzn_adj, 1))
+# Calculate number of shares purchased
+amzn_shares <- initial_investment / amzn_initial_price
+# Calculate the final value, profit, and percentage return
+amzn_final_value <- amzn_shares * amzn_final_price
+amzn_profit <- amzn_final_value - initial_investment
+amzn_percent_return <- (amzn_profit / initial_investment) * 100
+
+### Apple (AAPL) Investment Analysis ###
+# Extract the adjusted closing prices for Apple
+aapl_adj <- AAPL[, "AAPL.Adjusted"]
+# Get initial and final prices
+aapl_initial_price <- as.numeric(aapl_adj[1])
+aapl_final_price <- as.numeric(tail(aapl_adj, 1))
+# Calculate number of shares purchased
+aapl_shares <- initial_investment / aapl_initial_price
+# Calculate the final value, profit, and percentage return
+aapl_final_value <- aapl_shares * aapl_final_price
+aapl_profit <- aapl_final_value - initial_investment
+aapl_percent_return <- (aapl_profit / initial_investment) * 100
+
+### Print the Results ###
+cat("Investment Analysis Over 5 Years\n")
+cat("--------------------------------\n\n")
+
+cat("SPY Investment:\n")
+cat("Start Date:", index(spy_adj)[1], "\n")
+cat("Initial Price:", spy_initial_price, "\n")
+cat("End Date:", index(spy_adj)[length(spy_adj)], "\n")
+cat("Final Price:", spy_final_price, "\n")
+cat("Number of Shares Purchased:", spy_shares, "\n")
+cat("Final Value: $", spy_final_value, "\n")
+cat("Profit/Loss: $", spy_profit, "\n")
+cat("Percentage Return:", spy_percent_return, "%\n\n")
+
+cat("Bitcoin (BTC-USD) Investment:\n")
+cat("Start Date:", index(btc_adj)[1], "\n")
+cat("Initial Price:", btc_initial_price, "\n")
+cat("End Date:", index(btc_adj)[length(btc_adj)], "\n")
+cat("Final Price:", btc_final_price, "\n")
+cat("Number of Units Purchased:", btc_units, "\n")
+cat("Final Value: $", btc_final_value, "\n")
+cat("Profit/Loss: $", btc_profit, "\n")
+cat("Percentage Return:", btc_percent_return, "%\n\n")
+
+cat("Amazon (AMZN) Investment:\n")
+cat("Start Date:", index(amzn_adj)[1], "\n")
+cat("Initial Price:", amzn_initial_price, "\n")
+cat("End Date:", index(amzn_adj)[length(amzn_adj)], "\n")
+cat("Final Price:", amzn_final_price, "\n")
+cat("Number of Shares Purchased:", amzn_shares, "\n")
+cat("Final Value: $", amzn_final_value, "\n")
+cat("Profit/Loss: $", amzn_profit, "\n")
+cat("Percentage Return:", amzn_percent_return, "%\n\n")
+
+cat("Apple (AAPL) Investment:\n")
+cat("Start Date:", index(aapl_adj)[1], "\n")
+cat("Initial Price:", aapl_initial_price, "\n")
+cat("End Date:", index(aapl_adj)[length(aapl_adj)], "\n")
+cat("Final Price:", aapl_final_price, "\n")
+cat("Number of Shares Purchased:", aapl_shares, "\n")
+cat("Final Value: $", aapl_final_value, "\n")
+cat("Profit/Loss: $", aapl_profit, "\n")
+cat("Percentage Return:", aapl_percent_return, "%\n")
