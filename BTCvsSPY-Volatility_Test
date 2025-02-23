@@ -1,0 +1,47 @@
+# Load required package; install if not already installed
+if (!require(quantmod)) {
+  install.packages("quantmod")
+  library(quantmod)
+}
+
+# Define the time period for the analysis
+start_date <- "2020-01-01"    # Modify as needed
+end_date <- Sys.Date()        # Current date
+
+# Download historical data for Bitcoin (BTC-USD) and SPY from Yahoo Finance
+getSymbols("BTC-USD", src = "yahoo", from = start_date, to = end_date)
+getSymbols("SPY", src = "yahoo", from = start_date, to = end_date)
+
+# Extract the adjusted closing prices
+btc_adj <- `BTC-USD`[, "BTC-USD.Adjusted"]
+spy_adj <- SPY[, "SPY.Adjusted"]
+
+# Calculate daily returns
+btc_returns <- dailyReturn(btc_adj)
+spy_returns <- dailyReturn(spy_adj)
+
+# Compute the standard deviation of daily returns (volatility)
+sd_btc_daily <- sd(btc_returns, na.rm = TRUE)
+sd_spy_daily <- sd(spy_returns, na.rm = TRUE)
+
+# Convert daily volatility to percentage terms
+btc_daily_vol_pct <- sd_btc_daily * 100
+spy_daily_vol_pct <- sd_spy_daily * 100
+
+# Annualize the daily volatility (assuming 252 trading days per year)
+btc_annual_vol_pct <- btc_daily_vol_pct * sqrt(252)
+spy_annual_vol_pct <- spy_daily_vol_pct * sqrt(252)
+
+# For a $10,000 investment, estimate the dollar variation based on annualized volatility
+btc_dollar_variation <- 10000 * (btc_annual_vol_pct / 100)
+spy_dollar_variation <- 10000 * (spy_annual_vol_pct / 100)
+
+# Output the results
+cat("Bitcoin Daily Volatility (%):", btc_daily_vol_pct, "\n")
+cat("SPY Daily Volatility (%):", spy_daily_vol_pct, "\n\n")
+
+cat("Bitcoin Annualized Volatility (%):", btc_annual_vol_pct, "\n")
+cat("SPY Annualized Volatility (%):", spy_annual_vol_pct, "\n\n")
+
+cat("Estimated annual dollar variation for a $10,000 investment in Bitcoin:", btc_dollar_variation, "\n")
+cat("Estimated annual dollar variation for a $10,000 investment in SPY:", spy_dollar_variation, "\n")
